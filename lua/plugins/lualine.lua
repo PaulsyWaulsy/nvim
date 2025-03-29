@@ -2,34 +2,30 @@
 
 -- stylua: ignore
 local colors = {
-  black  = '#080808',
-  white  = '#ffffff',
-	coral = "#f78b6c",
-	flax = "#e9e092",
-	azure = "#cdddde",
-	slate = "#617885",
-	photo_blue = "#96e8f4",
-	tiffany = "#8ce8d9",
-	jordy = "#81aaff",
-	pacific = "#39aecd",
-	orchid = "#d970d6",
+  fg0  = "#080808",
+  fg1  = "#d5c4a1",
+	GruvboxRed = "#f07162",
+	GruvboxYellow = "#fabd2f",
+	GruvboxGreen = "#b8bb26",
+	GruvboxGray = "#504945",
+	GruvboxBlue = "#83a598",
 }
 
 local sunflower_theme = {
 	normal = {
-		a = { fg = colors.black, bg = colors.flax },
-		b = { fg = colors.white, bg = colors.slate },
-		c = { fg = colors.white },
+		a = { fg = colors.fg0, bg = colors.GruvboxYellow },
+		b = { fg = colors.fg1, bg = colors.GruvboxGray },
+		c = { fg = colors.fg1 },
 	},
 
-	insert = { a = { fg = colors.black, bg = colors.jordy } },
-	visual = { a = { fg = colors.black, bg = colors.tiffany } },
-	replace = { a = { fg = colors.black, bg = colors.coral } },
+	insert = { a = { fg = colors.fg0, bg = colors.GruvboxBlue } },
+	visual = { a = { fg = colors.fg0, bg = colors.GruvboxGreen } },
+	replace = { a = { fg = colors.fg0, bg = colors.GruvboxRed } },
 
 	inactive = {
-		a = { fg = colors.white, bg = colors.black },
-		b = { fg = colors.white, bg = colors.black },
-		c = { fg = colors.white },
+		a = { fg = colors.fg1, bg = colors.fg0 },
+		b = { fg = colors.fg1, bg = colors.fg0 },
+		c = { fg = colors.fg1 },
 	},
 }
 

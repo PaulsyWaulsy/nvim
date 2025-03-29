@@ -18,7 +18,7 @@ opt.splitbelow = true
 opt.timeoutlen = 500
 
 --enable colored line on cursor
-opt.cursorline = false
+opt.cursorline = true
 
 --will try to be smart about when tabbing so will use multuple if needed
 opt.smarttab = true

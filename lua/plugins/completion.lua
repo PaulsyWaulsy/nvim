@@ -4,11 +4,13 @@ return {
 		lazy = false,
 		priority = 100,
 		dependencies = {
-			"onsails/lspkind.nvim",
+			"neovim/nvim-lspconfig",
 			"hrsh7th/cmp-nvim-lsp",
-			"hrsh7th/cmp-path",
 			"hrsh7th/cmp-buffer",
-			{ "L3MON4D3/LuaSnip", build = "make install_jsregexp" },
+			"hrsh7th/cmp-path",
+			"hrsh7th/cmp-cmdline",
+
+			"L3MON4D3/LuaSnip",
 			"saadparwaiz1/cmp_luasnip",
 		},
 		config = function()
@@ -44,7 +46,7 @@ return {
 			local luasnip = require("luasnip")
 			luasnip.config.setup({})
 
-			local MAX_LABEL_WIDTH = 30
+			local MAX_LABEL_WIDTH = 20
 			local ELLIPLIL_CHAR = "…"
 			local EMPTY = ""
 
@@ -63,7 +65,7 @@ return {
 					documentation = cmp.config.window.bordered({
 						winhighlight = "Normal:Pmenu,FloatBorder:white,CursorLine:PmenuSel,Search:None",
 					}),
-					max_width = 30,
+					max_width = MAX_LABEL_WIDTH,
 				},
 
 				completion = {
@@ -91,11 +93,19 @@ return {
 				},
 
 				sorting = {
+					priority_weight = 2,
 					comparators = {
-						cmp.config.compare.locality,
-						cmp.config.compare.recently_used,
+						-- Below is the default comparitor list and order for nvim-cmp
+						cmp.config.compare.offset,
+						-- cmp.config.compare.scopes, --this is commented in nvim-cmp too
 						cmp.config.compare.exact,
-						cmp.config.compare.defualt,
+						cmp.config.compare.score,
+						cmp.config.compare.recently_used,
+						cmp.config.compare.locality,
+						cmp.config.compare.kind,
+						cmp.config.compare.sort_text,
+						cmp.config.compare.length,
+						cmp.config.compare.order,
 					},
 				},
 
@@ -121,18 +131,15 @@ return {
 					--    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
 				}),
 				sources = {
-					{
-						name = "lazydev",
-						-- set group index to 0 to skip loading LuaLS completions as lazydev recommends it
-						group_index = 0,
-					},
+					{ name = "lazydev", group_index = 0 },
 					{ name = "nvim_lsp", group_index = 1 },
 					{ name = "luasnip", group_index = 2 },
-					{ name = "path", group_index = 3 },
+					{ name = "buffer", group_index = 3 },
+					{ name = "path", group_index = 4 },
 				},
 
 				performance = {
-					max_view_entries = 10,
+					max_view_entries = 20,
 				},
 			})
 		end,
