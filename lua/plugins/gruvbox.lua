@@ -45,6 +45,7 @@ return {
 				["@variable.builtin"] = { link = "GruvboxFg1" },
 				["@variable.parameter"] = { link = "GruvboxFg1" },
 				["@property"] = { link = "GruvboxBlue" },
+				["@lsp.type.keyword"] = { nil },
 			},
 			dim_inactive = false,
 			transparent_mode = true,

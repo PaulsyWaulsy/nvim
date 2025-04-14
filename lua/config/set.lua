@@ -65,6 +65,8 @@ opt.termguicolors = true
 --brings the text up or when hitting 10 above or below the top or bottom
 opt.scrolloff = 10
 
+opt.conceallevel = 2
+
 --enable cursor to go one more char in normal mode
 vim.cmd("set ve+=onemore")
 --turn off the mouse
@@ -92,4 +94,12 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	callback = function()
 		vim.highlight.on_yank()
 	end,
+})
+
+-- LSP hover handler with syntax highlighting
+vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+	border = "rounded", -- You can choose other borders like "single", "double", etc.
+	width = 80, -- Optional: Set the width of the hover window
+	-- Enable syntax highlighting using treesitter in the hover window
+	focusable = false, -- Prevent focus on the hover window
 })
