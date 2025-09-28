@@ -46,6 +46,7 @@ return {
 			local luasnip = require("luasnip")
 			luasnip.config.setup({})
 
+			local WINDOW_WIDTH = 50
 			local MAX_LABEL_WIDTH = 20
 			local ELLIPLIL_CHAR = "…"
 			local EMPTY = ""
@@ -61,11 +62,11 @@ return {
 				window = {
 					completion = cmp.config.window.bordered({
 						winhighlight = "Normal:Pmenu,FloatBorder:white,CursorLine:PmenuSel,Search:None",
+						scrollbar = true,
 					}),
 					documentation = cmp.config.window.bordered({
 						winhighlight = "Normal:Pmenu,FloatBorder:white,CursorLine:PmenuSel,Search:None",
 					}),
-					max_width = MAX_LABEL_WIDTH,
 				},
 
 				completion = {
@@ -73,15 +74,45 @@ return {
 				},
 
 				formatting = {
-					expandable_indicator = false,
+					expandable_indicator = true,
 					fields = { "kind", "abbr", "menu" },
-					format = function(_, vim_item)
+					format = function(entry, vim_item)
 						local content = vim_item.abbr
-						vim_item.menu = EMPTY
 						if #content > MAX_LABEL_WIDTH then
 							vim_item.abbr = vim.fn.strcharpart(content, 0, MAX_LABEL_WIDTH) .. ELLIPLIL_CHAR
 						end
+
+						-- kind icons
 						vim_item.kind = cmp_kinds[vim_item.kind] or ""
+
+						-- show source/package in menu
+						local menu = ""
+						if entry.source.name == "nvim_lsp" and entry.completion_item.detail then
+							menu = entry.completion_item.detail
+						elseif
+							entry.source.name == "nvim_lsp"
+							and entry.completion_item.data
+							and entry.completion_item.data.containerName
+						then
+							menu = entry.completion_item.data.containerName
+						else
+							menu = ({
+								buffer = "[BUF]",
+								path = "[PATH]",
+								luasnip = "[SNIP]",
+								nvim_lua = "[LUA]",
+								cmdline = "[CMD]",
+							})[entry.source.name] or ("[" .. entry.source.name .. "]")
+						end
+
+						-- pad menu so it sticks to the right
+						local padding = WINDOW_WIDTH - #menu
+						if padding > 0 then
+							vim_item.menu = string.rep(" ", padding) .. menu
+						else
+							vim_item.menu = vim.fn.strcharpart(menu, 0, WINDOW_WIDTH - 1) .. ELLIPLIL_CHAR
+						end
+
 						return vim_item
 					end,
 				},
@@ -90,6 +121,10 @@ return {
 					expand = function(args)
 						luasnip.lsp_expand(args.body)
 					end,
+				},
+
+				view = {
+					docs = { auto_open = false },
 				},
 
 				sorting = {
@@ -102,7 +137,6 @@ return {
 						cmp.config.compare.score,
 						cmp.config.compare.recently_used,
 						cmp.config.compare.locality,
-						cmp.config.compare.kind,
 						cmp.config.compare.sort_text,
 						cmp.config.compare.length,
 						cmp.config.compare.order,
@@ -110,7 +144,7 @@ return {
 				},
 
 				mapping = cmp.mapping.preset.insert({
-					["<C-b>"] = cmp.mapping.scroll_docs(-4),
+					["<C-d>"] = cmp.mapping.scroll_docs(-4),
 					["<C-f>"] = cmp.mapping.scroll_docs(4),
 					["<CR>"] = cmp.mapping.confirm({ select = true }),
 					["<Tab>"] = cmp.mapping.select_next_item(),
